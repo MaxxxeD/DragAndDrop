@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="DragAndDrop.BacklogEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             Cursor="Hand"
+             MouseDown="BacklogEntryMouseDown"
+             MouseMove="BacklogEntryMouseMove"
+             MouseUp="BacklogEntryMouseUp" 
+             Height="180" 
+             Width="320">
+    <Canvas>
+        <Label Content="Drag me!"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center"
+               FontWeight="Bold"
+               FontSize="36"
+               Background="#FFFF1212" 
+               Height="176" 
+               Width="316"
+               Margin="2,2,2,2"
+               />
+    </Canvas>
+</UserControl>
