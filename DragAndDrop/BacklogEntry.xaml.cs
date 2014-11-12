@@ -18,26 +18,17 @@ namespace DragAndDrop
 {
     public partial class BacklogEntry : UserControl
     {
-        private Point  mBasePoint = new Point (0.0, 0.0);
-        private double mDeltaX   = 0.0;
-        private double mDeltaY   = 0.0;
+        private double mMouseX   = 0.0;
+        private double mMouseY   = 0.0;
         private bool   mMoving     = false;
-        private Point  mPositionInLabel;
+        private Point  Label;
+        private BacklogEntry tempEntry;
 
-        public double XPosition
+        public INotifyPositionChanged Delegate
         {
-            get { 
-                return mBasePoint.X + mDeltaX;
-            }
+            get;
+            set;
         }
-
-        public double YPosition
-        {
-            get { 
-                return mBasePoint.Y + mDeltaY;
-            }
-        }
-
 
         public BacklogEntry ()
         {
@@ -50,7 +41,15 @@ namespace DragAndDrop
             if (userControl != null) {
                 userControl.CaptureMouse();
                 mMoving = true;
-                mPositionInLabel = theEvent.GetPosition(userControl);
+                tempEntry = new BacklogEntry ();
+                tempEntry.Background = new SolidColorBrush (Color.FromArgb (50, 255, 0, 0));
+                Point p = theEvent.GetPosition(null);
+                mMouseX = p.X;
+                mMouseY = p.Y;
+                Delegate.ChangedPositionCanvas (tempEntry, 0, 0, this);
+                Label = Mouse.GetPosition (userControl);
+                userControl.BorderBrush = new SolidColorBrush (Color.FromArgb (255, 0, 0, 0));
+                userControl.BorderThickness = new Thickness (5);
             }
         }
 
@@ -58,10 +57,9 @@ namespace DragAndDrop
         {
             if (mMoving) {
                 Point p = theEvent.GetPosition(null);
-                mDeltaX = p.X - mBasePoint.X - mPositionInLabel.X;
-                mDeltaY = p.Y - mBasePoint.Y - mPositionInLabel.Y;
-                Canvas.SetLeft(this, XPosition);
-                Canvas.SetTop(this, YPosition);
+                mMouseX = p.X;
+                mMouseY = p.Y;
+                Delegate.ChangedPositionCanvas (tempEntry, mMouseX - Label.X, mMouseY - Label.Y, this);
             }
         }
 
@@ -70,10 +68,11 @@ namespace DragAndDrop
             UserControl userControl = theEvent.Source as UserControl;
             if (userControl != null) {
                 userControl.ReleaseMouseCapture();
-                mBasePoint.X += mDeltaX;
-                mBasePoint.Y += mDeltaY;
-                mDeltaX = 0.0;
-                mDeltaY = 0.0;
+                Delegate.DeleteElementFromCanvas (tempEntry);
+                Delegate.ChangedPosition (this, mMouseX, mMouseY);
+                userControl.BorderThickness = new Thickness (0);
+                mMouseX = 0.0;
+                mMouseY = 0.0;
                 mMoving = false;
             }
         }

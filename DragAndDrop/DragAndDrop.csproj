@@ -68,6 +68,7 @@
     <Compile Include="BacklogEntry.xaml.cs">
       <DependentUpon>BacklogEntry.xaml</DependentUpon>
     </Compile>
+    <Compile Include="INotifyPositionChanged.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
